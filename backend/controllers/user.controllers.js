@@ -73,10 +73,14 @@ export const askToAssistant = async(req, res) => {
 
     const user = await User.findById(req.userId);
 
+  user.history.push(command)
+  user.save()
+
+
     const userName = user.name;
     const assistantName = user.assistantName;
 
-     const result = await geminiResponse(command, userName, assistantName)
+     const result = await geminiResponse(command, assistantName, userName)
 
 
  const jsonMatch = result.match(/{[\s\S]*}/)
@@ -86,15 +90,18 @@ export const askToAssistant = async(req, res) => {
      return res.status(400).json({response: "sorry, i can't understand"})
 
  }
+ 
 
 
  const gemResult = JSON.parse(jsonMatch[0]);
+
+ console.log(gemResult);
 
  const type = gemResult.type;
 
 
  switch(type) {
-  case 'get-data' : 
+  case 'get-date' : 
      return res.json({
       type, 
       userInput:gemResult.userInput,
@@ -134,13 +141,13 @@ export const askToAssistant = async(req, res) => {
 
      });
     
-   case 'google_search':
-  case 'youtube_search':
-  case 'youtube_play':
+   case 'google-search':
+  case 'youtube-search':
+  case 'youtube-play':
  case 'general':
- case 'calculator_open':
- case 'instagram_open':
-case 'facebook_open':
+ case 'calculator-open':
+ case 'instagram-open':
+case 'facebook-open':
  case 'weather-show':
 
    return res.json({
@@ -155,7 +162,10 @@ case 'facebook_open':
 
  }
 
+
   } catch(error) {
    return res.status(500).json({response: "ask assistant error" })
   }
 }
+
+

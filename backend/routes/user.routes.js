@@ -11,9 +11,19 @@ userRouter.get("/current", isAuth ,getCurrentUser);
 userRouter.post("/update", isAuth , upload.single("assistantImage"), updateAssistant);
     
 
-userRouter.get("/asktoassistant", isAuth ,askToAssistant);
+userRouter.post("/asktoassistant", isAuth ,askToAssistant);
 
 
 export default userRouter;
+
+
+
+
+
+
+
+
+
+
 
 
