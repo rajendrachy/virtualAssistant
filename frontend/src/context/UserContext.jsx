@@ -64,9 +64,9 @@ const getGeminiResponse = async  (command) => {
 
   return (
     <div>
-      <UserDataContext.Provider value={value}>
+      <userDataContext.Provider value={value}>
           {children}
-      </UserDataContext.Provider>
+      </userDataContext.Provider>
       
     </div>
   )
