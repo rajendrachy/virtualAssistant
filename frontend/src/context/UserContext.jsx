@@ -6,7 +6,7 @@ import { createContext } from 'react'
 import { data } from 'react-router-dom';
 
 
-export const UserDataContext = createContext(null);
+export const userDataContext = createContext(null);
 
 
 
