@@ -6,7 +6,7 @@ import { createContext } from 'react'
 import { data } from 'react-router-dom';
 
 
-export const userDataContext = createContext();
+export const UserDataContext = createContext(null);
 
 
 
@@ -64,9 +64,9 @@ const getGeminiResponse = async  (command) => {
 
   return (
     <div>
-      <userDataContext.Provider value={value}>
+      <UserDataContext.Provider value={value}>
           {children}
-      </userDataContext.Provider>
+      </UserDataContext.Provider>
       
     </div>
   )
