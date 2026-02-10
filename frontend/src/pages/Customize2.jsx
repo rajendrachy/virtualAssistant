@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import axios from 'axios';
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 
