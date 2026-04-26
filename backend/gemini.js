@@ -1,80 +1,68 @@
 import axios from "axios";
 
+const cache = new Map();
+const CACHE_TIMEOUT = 5 * 60 * 1000;
+
 const geminiResponse = async (command, assistantName, userName) => {
+  const cacheKey = command.toLowerCase().trim();
+  const cached = cache.get(cacheKey);
+  
+  if (cached && Date.now() - cached.timestamp < CACHE_TIMEOUT) {
+    console.log("Using cached response for:", command);
+    return cached.data;
+  }
+
   try {
-   const apiUrl = process.env.GEMINI_API_URL
+    const apiKey = process.env.GEMINI_API_KEY;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
+    const prompt = `You are ${assistantName}, a helpful AI assistant created by ${userName}.
+Give a direct, short answer to this question or do what asked:
+"${command}"
 
-  const prompt = `You are a virtual assistant named ${assistantName} created by ${userName}.
+Respond with JSON only:
+{"type": "answer", "response": "your direct answer"}`;
 
-  You are not Google. You will now behave like a voice-enable assistant.
+    const result = await axios.post(apiUrl, {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 1.0,
+        maxOutputTokens: 400
+      }
+    }, { timeout: 15000 });
 
-  your task is to understand the user's natural language input and respond with a JSON object like this:
+    if (!result.data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+      return JSON.stringify({
+        type: "answer",
+        response: `Let me help with that: ${command}`
+      });
+    }
 
-{
-"type": "general" | "google-search" | "youtube-search" | "youtube-play" |
-"get-time" | "get-date" | "get-day" | "get-month"|"calculator-open" |
-"instagram-open"|"facebook-open" |"weather-show",
+    const response = result.data.candidates[0].content.parts[0].text;
+    cache.set(cacheKey, { data: response, timestamp: Date.now() });
+    
+    if (cache.size > 50) {
+      const firstKey = cache.keys().next().value;
+      cache.delete(firstKey);
+    }
 
-"userInput": "<original user input>" {only remove your name from userinput if exists} and agar kisi ne google ya youtube pe kuch search karne ko bola hai to userInput me only bo search baala text jaye,
-
-"response": "<a short spoken response to read out loud to the user>"
-}
-
-
-Instructions:
-- "type": determine the intent of the user.
-- "userinput": original sentence the user spoke.
-- "response": A short voice-friendly reply, e.g., "Sure, playing it now", "Here's what I found", "Today is Tuesday", etc.
-
-
-Type meanings:
-- "general": if it's a factual or informational question.aur agar koi aisa question puchta hai jiska answer tume pata hai usko bhi general ki category me rakho bas short answer dena
-- "google-search": if user wants to search something on Google .
-- "youtube-search": if user wants to search something on YouTube.
-- "youtube-play": if user wants to directly play a video or song.
-- "calculator-open": if user wants to open a calculator .
-- "instagram-open": if user wants to open instagram .
-- "facebook-open": if user wants to open facebook.
-- "weather-show": if user wants to know weather
-- "get-time": if user asks for current time.
-- "get-date": if user asks for today's date.
-- "get-day": if user asks what day it is.
-- "get-month": if user asks for the current month.
-
-
-
-Important:
-- Use ${userName} agar koi puche tume kisne banaya
-- Only respond with the JSON object, nothing else.
-
-now your userInput- ${command}
-`;
-
-
-
-
-
-
-   const result = await axios.post(apiUrl, {
-     "contents": [{
-        "parts": [{ "text": prompt}]
-      }]
-   })
-
-
-   return result.data.candidates[0].content.parts[0].text;
-
+    return response;
 
   } catch(error) {
-   console.log(error);
-
+    console.log("API Error:", error.message);
+    
+    if (error.response?.status === 429) {
+      return JSON.stringify({
+        type: "answer",
+        response: `I'm getting too many requests. Please wait a moment and try again.`
+      });
+    }
+    
+    return JSON.stringify({
+      type: "answer",
+      response: `I had an issue processing "${command}". Can you try again?`
+    });
   }
-}
+};
 
 export default geminiResponse;
-
-
-
-
-
