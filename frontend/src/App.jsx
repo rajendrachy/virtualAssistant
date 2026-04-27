@@ -1,40 +1,54 @@
-import React from 'react'
-// force redeploy
-import {Route, Routes, Navigate}  from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Customize from './pages/Customize.jsx';
-import { useContext } from 'react';
-import { userDataContext } from './context/userContext.jsx';
 import Customize2 from './pages/Customize2.jsx';
-import Home from './pages/Home.jsx'; 
+import Home from './pages/Home.jsx';
+
+// ✅ FIXED: correct casing
+import { userDataContext } from './context/UserContext';
 
 function App() {
 
-  const {userData, setUserData} = useContext(userDataContext);
+  const { userData, setUserData } = useContext(userDataContext);
 
   return (
-   <Routes>
-   <Route path='/' element={(userData?.assistantImage && userData?.assistantName) ?<Home/> :  <Navigate to={"/customize"} />} />
-   
-   <Route path='/signup' element={!userData? <SignUp/> : <Navigate to={"/"} /> } />
+    <Routes>
 
+      <Route
+        path="/"
+        element={
+          (userData?.assistantImage && userData?.assistantName)
+            ? <Home />
+            : <Navigate to="/customize" />
+        }
+      />
 
-   <Route path='/signin' element={!userData? <SignIn/> : <Navigate to ={"/"} />} />
+      <Route
+        path="/signup"
+        element={!userData ? <SignUp /> : <Navigate to="/" />}
+      />
 
+      <Route
+        path="/signin"
+        element={!userData ? <SignIn /> : <Navigate to="/" />}
+      />
 
-   <Route path='/customize' element={userData?<Customize/> : <Navigate to={"/signup"} />} />
+      <Route
+        path="/customize"
+        element={userData ? <Customize /> : <Navigate to="/signup" />}
+      />
 
+      <Route
+        path="/customize2"
+        element={userData ? <Customize2 /> : <Navigate to="/signup" />}
+      />
 
-
-<Route path='/customize2' element={userData?<Customize2/> : <Navigate to={"/signup"} />} />
-
-   </Routes>
-  )
+    </Routes>
+  );
 }
 
-export default App
-
-
-
+export default App;
 
