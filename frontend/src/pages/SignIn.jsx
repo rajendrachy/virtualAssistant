@@ -25,6 +25,7 @@ function SignIn() {
 
   const introText = "AI SYSTEM // VIRTUAL ASSISTANT v2.0";
 
+
   useEffect(() => {
     let i = 0;
     const timer = setInterval(() => {
@@ -47,6 +48,7 @@ function SignIn() {
     canvas.height = window.innerHeight;
 
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    
     const fontSize = 14;
     const columns = canvas.width / fontSize;
     const drops = Array(Math.floor(columns)).fill(1);
