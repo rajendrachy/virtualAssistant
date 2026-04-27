@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { userDataContext } from '../context/userContext'
+import { userDataContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CgMenuRight } from "react-icons/cg";
@@ -9,7 +9,7 @@ import { IoMdLogOut } from "react-icons/io";
 import { IoSettings } from "react-icons/io5";
 
 function Home() {
-  const {userData, serverUrl, setUserData, getGeminiResponse} = useContext(userDataContext);
+  const { userData, serverUrl, setUserData, getGeminiResponse } = useContext(userDataContext);
   const navigate = useNavigate();
 
   const [listening, setListening] = useState(false);
@@ -48,10 +48,10 @@ function Home() {
 
   const handleLogOut = async () => {
     try {
-      await axios.get(`${serverUrl}/api/auth/logout`, {withCredentials: true});
+      await axios.get(`${serverUrl}/api/auth/logout`, { withCredentials: true });
       setUserData(null);
       navigate("/signin");
-    } catch(error) {
+    } catch (error) {
       setUserData(null);
     }
   };
@@ -79,7 +79,7 @@ function Home() {
     const cmdLower = originalCommand.toLowerCase();
     const assistantName = userData?.assistantName || 'Assistant';
     const creatorName = userData?.name || '';
-    
+
     setCommandHistory(prev => [originalCommand, ...prev.slice(0, 9)]);
 
     const siteMap = {
@@ -100,7 +100,7 @@ function Home() {
 
     const greetings = ['hello', 'hi', 'hey', 'good morning', 'good evening', 'good night', 'greetings', 'salam', 'namaste'];
     const isGreeting = greetings.some(g => cmdLower === g || cmdLower.startsWith(g + ' ') || cmdLower.includes(' ' + g));
-    
+
     if (isGreeting) {
       const greets = [
         `Hello ${creatorName}! I'm ${assistantName}. How can I assist you today?`,
@@ -212,7 +212,7 @@ function Home() {
     }
 
     const openKeywords = ['open', 'go to', 'launch', 'start', 'show me'];
-    const isOpenRequest = openKeywords.some(kw => cmdLower.startsWith(kw + ' ')); 
+    const isOpenRequest = openKeywords.some(kw => cmdLower.startsWith(kw + ' '));
 
     for (const [key, value] of Object.entries(siteMap)) {
       if (cmdLower.includes(key) && (isOpenRequest || cmdLower.includes(' ' + key))) {
@@ -244,19 +244,19 @@ function Home() {
 
   const processInput = async (command) => {
     if (!command.trim()) return;
-    
+
     const cmd = command.trim();
     setUserText(cmd);
     setInputText("");
     setAIProcessing(true);
-    
+
     const data = await getGeminiResponse(cmd);
-    
+
     if (data) {
       setAiText(data.response || "");
       handleCommand(data, cmd);
     }
-    
+
     setAIProcessing(false);
   };
 
@@ -280,16 +280,16 @@ function Home() {
 
     const startTimeout = setTimeout(() => {
       if (isMount && !isSpeakingRef.current && !isRecogizingRef.current) {
-        try { recognition.start(); } catch(e) { if(e.name !== "InvalidStateError") console.error(e); }
+        try { recognition.start(); } catch (e) { if (e.name !== "InvalidStateError") console.error(e); }
       }
     }, 1000);
 
     recognition.onstart = () => { isRecogizingRef.current = true; setListening(true); };
-    recognition.onend = () => { isRecogizingRef.current = false; setListening(false); if(isMount && !isSpeakingRef.current) setTimeout(() => { try { recognition.start(); } catch(e) {}}, 1000); };
-    recognition.onerror = (event) => { isRecogizingRef.current = false; setListening(false); if(event.error !== "aborted" && isMount) setTimeout(() => { try { recognition.start(); } catch(e) {}}, 1000); };
+    recognition.onend = () => { isRecogizingRef.current = false; setListening(false); if (isMount && !isSpeakingRef.current) setTimeout(() => { try { recognition.start(); } catch (e) { } }, 1000); };
+    recognition.onerror = (event) => { isRecogizingRef.current = false; setListening(false); if (event.error !== "aborted" && isMount) setTimeout(() => { try { recognition.start(); } catch (e) { } }, 1000); };
 
     recognition.onresult = async (e) => {
-      const transcript = e.results[e.results.length-1][0].transcript.trim();
+      const transcript = e.results[e.results.length - 1][0].transcript.trim();
       if (transcript.toLowerCase().includes(userData?.assistantName?.toLowerCase())) {
         setAiText("");
         setUserText(transcript);
@@ -322,11 +322,11 @@ function Home() {
           <p>TERMINAL: <span className="text-[#0f0]">ACTIVE</span></p>
           <p>ASSISTANT: {userData?.assistantName}</p>
         </div>
-        <CgMenuRight className="lg:hidden text-[#0f0]/70 w-6 h-6 cursor-pointer" onClick={() => setHam(true)}/>
+        <CgMenuRight className="lg:hidden text-[#0f0]/70 w-6 h-6 cursor-pointer" onClick={() => setHam(true)} />
       </div>
 
-      <div className={`fixed lg:hidden top-0 right-0 w-[280px] h-full bg-[#0a0a0a] z-30 p-4 transition-transform duration-300 ${ham?"translate-x-0":"translate-x-full"}`}>
-        <RxCross1 className="text-[#0f0]/70 absolute top-4 right-4 w-5 h-5 cursor-pointer" onClick={() => setHam(false)}/>
+      <div className={`fixed lg:hidden top-0 right-0 w-[280px] h-full bg-[#0a0a0a] z-30 p-4 transition-transform duration-300 ${ham ? "translate-x-0" : "translate-x-full"}`}>
+        <RxCross1 className="text-[#0f0]/70 absolute top-4 right-4 w-5 h-5 cursor-pointer" onClick={() => setHam(false)} />
         <div className="mt-12 space-y-2">
           <button className="w-full h-10 bg-[#0f0]/10 border border-[#0f0]/30 hover:bg-[#0f0]/20 text-[#0f0] font-mono text-sm flex items-center gap-2 px-3 rounded-sm" onClick={() => navigate("/customize")}>
             <IoSettings className="w-4 h-4" /> CONFIG
@@ -357,9 +357,9 @@ function Home() {
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-[#0f0] text-xl font-mono font-bold flex items-center gap-2"><FaRobot className="text-[#0f0]" />{userData?.assistantName}</h1>
           <div className="flex items-center gap-2 px-3 py-1 bg-[#0f0]/10 border border-[#0f0]/30 rounded-sm">
-            {listening ? (<><FaMicrophone className="w-3 h-3 text-[#0f0] animate-pulse" /><span className="text-[#0f0] font-mono text-xs">RECEIVING...</span></>) : 
-             isSpeaking ? (<><span className="w-2 h-2 bg-[#0f0] rounded-full animate-pulse"></span><span className="text-[#0f0] font-mono text-xs">TRANSMITTING...</span></>) :
-             (<><FaMicrophoneSlash className="w-3 h-3 text-[#0f0]/50" /><span className="text-[#0f0]/50 font-mono text-xs">AWAITING INPUT</span></>)}
+            {listening ? (<><FaMicrophone className="w-3 h-3 text-[#0f0] animate-pulse" /><span className="text-[#0f0] font-mono text-xs">RECEIVING...</span></>) :
+              isSpeaking ? (<><span className="w-2 h-2 bg-[#0f0] rounded-full animate-pulse"></span><span className="text-[#0f0] font-mono text-xs">TRANSMITTING...</span></>) :
+                (<><FaMicrophoneSlash className="w-3 h-3 text-[#0f0]/50" /><span className="text-[#0f0]/50 font-mono text-xs">AWAITING INPUT</span></>)}
           </div>
         </div>
 

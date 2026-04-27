@@ -3,7 +3,7 @@ import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext';
 import axios from 'axios';
 import { FaRobot, FaNetworkWired } from "react-icons/fa";
 
@@ -18,12 +18,12 @@ function SignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(null);
-  const [formData, setFormData] = useState({ 
-    name: '', 
-    email: '', 
-    password: '', 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
     confirmPassword: '',
-    agreeTerms: false 
+    agreeTerms: false
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -31,12 +31,12 @@ function SignUp() {
   const [typedText, setTypedText] = useState('');
   const matrixRef = useRef(null);
 
-  const { serverUrl, setUserData} = useContext(userDataContext);
+  const { serverUrl, setUserData } = useContext(userDataContext);
 
   const navigate = useNavigate("");
 
   const introText = "NEW_AGENT_REGISTRATION // INITIALIZING...";
-  
+
   useEffect(() => {
     let i = 0;
     const timer = setInterval(() => {
@@ -53,7 +53,7 @@ function SignUp() {
   useEffect(() => {
     const canvas = matrixRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -73,7 +73,7 @@ function SignUp() {
         const char = chars[Math.floor(Math.random() * chars.length)];
         const x = i * fontSize;
         const y = drops[i] * fontSize;
-        
+
         const opacity = Math.random() * 0.5 + 0.5;
         ctx.fillStyle = `rgba(0, 255, 136, ${opacity})`;
         ctx.fillText(char, x, y);
@@ -126,12 +126,12 @@ function SignUp() {
         name: formData.name,
         email: formData.email,
         password: formData.password
-      }, {withCredentials: true})
- 
+      }, { withCredentials: true })
+
       setUserData(result.data);
       setLoading(false);
       navigate("/customize")
-     
+
     } catch (error) {
       setUserData(null);
       setLoading(false);
@@ -142,11 +142,11 @@ function SignUp() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#000] relative overflow-hidden">
-      
+
       <canvas ref={matrixRef} className="absolute inset-0 w-full h-full pointer-events-none" />
-      
+
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80 pointer-events-none" />
-      
+
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         <div className="absolute top-10 left-10 text-[#0f0]/60 font-mono text-xs">
           <p className="animate-pulse">{typedText}</p>
@@ -161,7 +161,7 @@ function SignUp() {
 
       <div className="relative z-10 w-[90%] max-w-[420px]">
         <div className="bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#0f0]/30 rounded-sm p-8 shadow-[0_0_30px_rgba(0,255,0,0.1)] max-h-[90vh] overflow-y-auto">
-          
+
           <div className="flex flex-col items-center mb-6">
             <div className="relative">
               <div className="w-16 h-16 border-2 border-[#0f0] rounded-sm flex items-center justify-center mb-4">
@@ -176,12 +176,12 @@ function SignUp() {
           </div>
 
           <form className="space-y-3" onSubmit={handleSignUp}>
-            
+
             <div>
               <label className="text-[#0f0]/70 font-mono text-xs uppercase tracking-wider ml-1 mb-1 block">Agent_Name</label>
-              <input 
-                type="text" 
-                placeholder='designation' 
+              <input
+                type="text"
+                placeholder='designation'
                 className="w-full h-10 bg-[#0a0a0a] border border-[#0f0]/30 text-[#0f0] font-mono placeholder-[#0f0]/30 px-3 rounded-sm text-sm focus:outline-none focus:border-[#0f0] transition-all"
                 onFocus={() => setIsFocused('name')}
                 onBlur={() => setIsFocused(null)}
@@ -193,9 +193,9 @@ function SignUp() {
 
             <div>
               <label className="text-[#0f0]/70 font-mono text-xs uppercase tracking-wider ml-1 mb-1 block">Channel</label>
-              <input 
-                type="email" 
-                placeholder='channel@node.net' 
+              <input
+                type="email"
+                placeholder='channel@node.net'
                 className="w-full h-10 bg-[#0a0a0a] border border-[#0f0]/30 text-[#0f0] font-mono placeholder-[#0f0]/30 px-3 rounded-sm text-sm focus:outline-none focus:border-[#0f0] transition-all"
                 onFocus={() => setIsFocused('email')}
                 onBlur={() => setIsFocused(null)}
@@ -208,9 +208,9 @@ function SignUp() {
             <div>
               <label className="text-[#0f0]/70 font-mono text-xs uppercase tracking-wider ml-1 mb-1 block">Access_Key</label>
               <div className="relative">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="key_code" 
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="key_code"
                   className="w-full h-10 bg-[#0a0a0a] border border-[#0f0]/30 text-[#0f0] font-mono placeholder-[#0f0]/30 px-3 pr-8 rounded-sm text-sm focus:outline-none focus:border-[#0f0] transition-all"
                   onFocus={() => setIsFocused('password')}
                   onBlur={() => setIsFocused(null)}
@@ -229,28 +229,28 @@ function SignUp() {
                   )}
                 </button>
               </div>
-              
+
               {formData.password && (
                 <div className="mt-1">
                   <div className="flex gap-0.5">
                     {[...Array(4)].map((_, i) => (
-                      <div 
-                        key={i} 
+                      <div
+                        key={i}
                         className={`h-0.5 flex-1 ${i < passwordStrength ? getStrengthColor() : 'bg-[#0f0]/20'}`}
                       />
                     ))}
                   </div>
                 </div>
               )}
-              
+
               {errors.password && <p className="text-red-500 font-mono text-xs mt-1 ml-1">! {errors.password}</p>}
             </div>
 
             <div>
               <label className="text-[#0f0]/70 font-mono text-xs uppercase tracking-wider ml-1 mb-1 block">Confirm_Key</label>
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="reconfirm" 
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="reconfirm"
                 className="w-full h-10 bg-[#0a0a0a] border border-[#0f0]/30 text-[#0f0] font-mono placeholder-[#0f0]/30 px-3 rounded-sm text-sm focus:outline-none focus:border-[#0f0] transition-all"
                 onFocus={() => setIsFocused('confirmPassword')}
                 onBlur={() => setIsFocused(null)}
@@ -261,8 +261,8 @@ function SignUp() {
             </div>
 
             <div className="flex items-start gap-2 pt-1">
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 checked={formData.agreeTerms}
                 onChange={(e) => setFormData(prev => ({ ...prev, agreeTerms: e.target.checked }))}
                 className="mt-1 w-4 h-4 rounded-sm border-[#0f0]/30 bg-[#0a0a0a] accent-[#0f0] cursor-pointer"
@@ -279,7 +279,7 @@ function SignUp() {
               </p>
             )}
 
-            <button 
+            <button
               className="w-full h-11 bg-[#0f0]/10 border border-[#0f0]/50 hover:bg-[#0f0]/20 hover:border-[#0f0] text-[#0f0] font-mono font-bold tracking-wider rounded-sm transition-all disabled:opacity-50"
               disabled={loading}
             >
@@ -293,8 +293,8 @@ function SignUp() {
 
           <div className="mt-5 text-center">
             <p className="text-[#0f0]/50 font-mono text-xs">
-              <span 
-                className="cursor-pointer hover:text-[#0f0] transition-colors" 
+              <span
+                className="cursor-pointer hover:text-[#0f0] transition-colors"
                 onClick={() => navigate("/signin")}
               >
                 [ EXISTING_AGENT_LOGIN ]

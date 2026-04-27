@@ -8,7 +8,7 @@ import Customize2 from './pages/Customize2.jsx';
 import Home from './pages/Home.jsx';
 
 // ✅ FIXED: correct casing
-import { userDataContext } from './context/UserContext';
+import { userDataContext } from './context/UserContext.jsx';
 
 function App() {
 

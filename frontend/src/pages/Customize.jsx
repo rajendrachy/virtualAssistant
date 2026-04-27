@@ -8,12 +8,12 @@ import image5 from "../assets/image6.jpeg";
 import image6 from "../assets/image7.jpeg";
 import { RiImageAddLine } from "react-icons/ri";
 import { useState, useRef, useContext } from 'react';
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { FaRobot, FaArrowLeft, FaCheck } from "react-icons/fa";
 
 function Customize() {
-  const {serverUrl, userData, setUserData, backendImage, setBackendImage, frontendImage, setFrontendImage, selectedImage, setSelectedImage} = useContext(userDataContext)
+  const { serverUrl, userData, setUserData, backendImage, setBackendImage, frontendImage, setFrontendImage, selectedImage, setSelectedImage } = useContext(userDataContext)
   const navigate = useNavigate()
   const inputImage = useRef(null)
   const [hoveredImage, setHoveredImage] = useState(null)
@@ -35,13 +35,13 @@ function Customize() {
 
   return (
     <div className="min-h-screen w-full bg-[#000] flex justify-center items-center p-4 sm:p-8 relative overflow-hidden">
-      
+
       <div className="absolute inset-0 bg-gradient-radial from-[#0a1a0a] via-[#000] to-[#000]"></div>
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: `radial-gradient(circle at 50% 50%, rgba(0,255,0,0.05) 0%, transparent 50%)` }}></div>
       </div>
 
-      <FaArrowLeft className="absolute top-5 left-5 text-[#0f0]/50 w-6 h-6 cursor-pointer hover:text-[#0f0] transition-colors z-10" onClick={() => navigate('/signin')}/>
+      <FaArrowLeft className="absolute top-5 left-5 text-[#0f0]/50 w-6 h-6 cursor-pointer hover:text-[#0f0] transition-colors z-10" onClick={() => navigate('/signin')} />
 
       <div className="relative z-10 w-full max-w-3xl">
         <div className="flex flex-col items-center mb-8">
@@ -59,10 +59,10 @@ function Customize() {
             <Card key={index} image={img.src} name={img.name} />
           ))}
 
-          <div 
+          <div
             className={`relative aspect-square rounded-sm overflow-hidden border-2 cursor-pointer transition-all duration-300
               ${selectedImage === "custom" || frontendImage
-                ? 'border-[#0f0] shadow-[0_0_20px_rgba(0,255,0,0.5)]' 
+                ? 'border-[#0f0] shadow-[0_0_20px_rgba(0,255,0,0.5)]'
                 : 'border-[#0f0]/30 hover:border-[#0f0]/70 hover:shadow-[0_0_15px_rgba(0,255,0,0.3)]'
               }`}
             onClick={() => {
@@ -80,18 +80,18 @@ function Customize() {
             )}
           </div>
         </div>
-        
-        <input 
-          type="file" 
-          accept='image/*' 
-          ref={inputImage} 
-          hidden 
+
+        <input
+          type="file"
+          accept='image/*'
+          ref={inputImage}
+          hidden
           onChange={handleImage}
         />
 
         {selectedImage && (
           <div className="flex justify-center mt-8">
-            <button 
+            <button
               className="px-8 py-3 bg-[#0f0]/10 border border-[#0f0]/50 hover:bg-[#0f0]/20 hover:border-[#0f0] text-[#0f0] font-mono font-bold tracking-wider rounded-sm transition-all"
               onClick={() => navigate("/customize2")}
             >

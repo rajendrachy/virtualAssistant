@@ -3,7 +3,7 @@ import { IoEye } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext';
 import axios from 'axios';
 import { FaRobot, FaNetworkWired, FaMicrochip, FaBrain } from "react-icons/fa";
 
@@ -19,12 +19,12 @@ function SignIn() {
   const [typedText, setTypedText] = useState('');
   const matrixRef = useRef(null);
 
-  const { serverUrl, userData, setUserData} = useContext(userDataContext);
+  const { serverUrl, userData, setUserData } = useContext(userDataContext);
 
   const navigate = useNavigate("");
 
   const introText = "AI SYSTEM // VIRTUAL ASSISTANT v2.0";
-  
+
   useEffect(() => {
     let i = 0;
     const timer = setInterval(() => {
@@ -41,7 +41,7 @@ function SignIn() {
   useEffect(() => {
     const canvas = matrixRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -61,7 +61,7 @@ function SignIn() {
         const char = chars[Math.floor(Math.random() * chars.length)];
         const x = i * fontSize;
         const y = drops[i] * fontSize;
-        
+
         const opacity = Math.random() * 0.5 + 0.5;
         ctx.fillStyle = `rgba(0, 255, 136, ${opacity})`;
         ctx.fillText(char, x, y);
@@ -106,12 +106,12 @@ function SignIn() {
       let result = await axios.post(`${serverUrl}/api/auth/login`, {
         email: formData.email,
         password: formData.password
-      }, {withCredentials: true})
-      
+      }, { withCredentials: true })
+
       setUserData(result.data);
       setLoading(false);
       navigate("/")
- 
+
     } catch (error) {
       setUserData(null);
       setLoading(false);
@@ -122,16 +122,16 @@ function SignIn() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#000] relative overflow-hidden">
-      
+
       <canvas ref={matrixRef} className="absolute inset-0 w-full h-full pointer-events-none" />
-      
+
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/80 pointer-events-none" />
-      
+
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         <div className="absolute top-10 left-10 text-[#0f0]/60 font-mono text-xs">
           <p className="animate-pulse">{typedText}</p>
         </div>
-        
+
         <div className="absolute top-10 right-10 flex items-center gap-4 text-[#0f0]/60 font-mono text-xs">
           <div className="flex items-center gap-2">
             <FaBrain className="w-3 h-3" />
@@ -157,7 +157,7 @@ function SignIn() {
 
       <div className="relative z-10 w-[90%] max-w-[420px]">
         <div className="bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#0f0]/30 rounded-sm p-8 shadow-[0_0_30px_rgba(0,255,0,0.1)]">
-          
+
           <div className="flex flex-col items-center mb-8">
             <div className="relative">
               <div className="w-16 h-16 border-2 border-[#0f0] rounded-sm flex items-center justify-center mb-4">
@@ -172,12 +172,12 @@ function SignIn() {
           </div>
 
           <form className="space-y-4" onSubmit={handleSignIn}>
-            
+
             <div>
               <label className="text-[#0f0]/70 font-mono text-xs uppercase tracking-wider ml-1 mb-1 block">Identifier</label>
-              <input 
-                type="email" 
-                placeholder='user@domain.com' 
+              <input
+                type="email"
+                placeholder='user@domain.com'
                 className="w-full h-12 bg-[#0a0a0a] border border-[#0f0]/30 text-[#0f0] font-mono placeholder-[#0f0]/30 px-4 rounded-sm text-sm focus:outline-none focus:border-[#0f0] transition-all"
                 onFocus={() => setIsFocused('email')}
                 onBlur={() => setIsFocused(null)}
@@ -190,9 +190,9 @@ function SignIn() {
             <div>
               <label className="text-[#0f0]/70 font-mono text-xs uppercase tracking-wider ml-1 mb-1 block">Passcode</label>
               <div className="relative">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="********" 
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="********"
                   className="w-full h-12 bg-[#0a0a0a] border border-[#0f0]/30 text-[#0f0] font-mono placeholder-[#0f0]/30 px-4 pr-10 rounded-sm text-sm focus:outline-none focus:border-[#0f0] transition-all"
                   onFocus={() => setIsFocused('password')}
                   onBlur={() => setIsFocused(null)}
@@ -216,8 +216,8 @@ function SignIn() {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   checked={formData.remember}
                   onChange={(e) => setFormData(prev => ({ ...prev, remember: e.target.checked }))}
                   className="w-4 h-4 rounded-sm border-[#0f0]/30 bg-[#0a0a0a] accent-[#0f0]"
@@ -232,11 +232,11 @@ function SignIn() {
               </p>
             )}
 
-            <button 
+            <button
               className="w-full h-12 bg-[#0f0]/10 border border-[#0f0]/50 hover:bg-[#0f0]/20 hover:border-[#0f0] text-[#0f0] font-mono font-bold tracking-wider rounded-sm transition-all disabled:opacity-50"
               disabled={loading}
             >
-{loading ? (
+              {loading ? (
                 <span className="animate-pulse">&gt; EXECUTING...</span>
               ) : (
                 <span>&gt; INITIATE_SESSION</span>
@@ -246,8 +246,8 @@ function SignIn() {
 
           <div className="mt-6 text-center">
             <p className="text-[#0f0]/50 font-mono text-xs">
-              <span 
-                className="cursor-pointer hover:text-[#0f0] transition-colors" 
+              <span
+                className="cursor-pointer hover:text-[#0f0] transition-colors"
                 onClick={() => navigate("/signup")}
               >
                 [ NEW_AGENT_REGISTRATION ]
